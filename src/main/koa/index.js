@@ -19,7 +19,6 @@ router.get('/', async (ctx, next) => {
   let name
   if (ctx.request.query.name) {
     name = ctx.request.query.name
-
     await new Promise((resolve, reject) => {
       app.dispatch('fetchObjectSignal', name)
       ipcMain.on('toKoa', (e, msg) => {

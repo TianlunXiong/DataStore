@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import home from '@/pages/home.vue'
 import creator from '@/pages/creator.vue'
 import factory from '@/pages/creator/factory.vue'
-
+import dStore from '@/pages/creator/dStore.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -22,6 +22,11 @@ export default new Router({
           path: 'factory',
           name: 'factory',
           component: factory
+        },
+        {
+          path: 'dStore',
+          name: 'dStore',
+          component: dStore
         }
       ]
     },

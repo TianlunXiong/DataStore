@@ -15,7 +15,11 @@ export default {
     SAVE (state, object) {
       state.objects[object.name] = object.body
     },
-
+    DELETE_OBJECT (state, name) {
+      if (delete state.object[name]) {
+        console.log('成功删除')
+      }
+    },
     PUSH_ENTRIES_BUFFER (state, item) {
       state.factory.entriesBuffer.push(item)
     },
@@ -34,7 +38,9 @@ export default {
     save (context, object) {
       context.commit('SAVE', object)
     },
-
+    deleteObject (context, name) {
+      context.commit('DELETE_OBJECT', name)
+    },
     pushEntriesBuffer (context, item) {
       context.commit('PUSH_ENTRIES_BUFFER', item)
     },

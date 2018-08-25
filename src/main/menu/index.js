@@ -3,27 +3,21 @@ const template = [
   {
     label: 'App',
     submenu: [
-      {
-        label: 'Open Server',
-        type: 'checkbox',
-        checked: false,
-        click (menuItem, broswerWindow, e) {
-          switch (menuItem.checked) {
-            case true:
-              app.dispatch('switchServer', 'open')
-              break
-            case false:
-              app.dispatch('switchServer', 'close')
-              break
-          }
-        }
-      },
-      {
-        label: 'sendToRenderer',
-        click () {
-          app.dispatch('fetchObjectSignal')
-        }
-      },
+      // {
+      //   label: 'Open Server',
+      //   type: 'checkbox',
+      //   checked: false,
+      //   click (menuItem, broswerWindow, e) {
+      //     switch (menuItem.checked) {
+      //       case true:
+      //         app.dispatch('switchServer', 'open')
+      //         break
+      //       case false:
+      //         app.dispatch('switchServer', 'close')
+      //         break
+      //     }
+      //   }
+      // },
       {
         role: 'quit',
         label: 'Exit'

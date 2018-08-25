@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <object-map></object-map>
-  </div>
+ <v-layout justify-center>
+    <v-flex xs12 lg6>
+      <object-map></object-map>
+    </v-flex>
+ </v-layout>
 </template>
 
 <script>

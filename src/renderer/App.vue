@@ -6,41 +6,37 @@
       app
     >
       <v-list dense>
-        <v-list-tile @click="()=>{}">
+        <v-list-tile @click="$router.replace('/')">
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>
-              <router-link to="/">home</router-link>
-            </v-list-tile-title>
+            <v-list-tile-title>Home</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click="()=>{}">
+        <v-list-tile @click="$router.replace('/creator/factory')">
           <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
+            <v-icon>build</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Contact</v-list-tile-title>
+            <v-list-tile-title>Factory</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click="()=>{}">
+        <v-list-tile @click="$router.replace('/creator/dStore')">
           <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
+            <v-icon>subject</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>
-              <router-link to="/creator/factory">creator</router-link>
-            </v-list-tile-title>
+            <v-list-tile-title>DStore</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar color="indigo" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-title></v-toolbar-title>
     </v-toolbar>
-    <v-content>
+    <v-content class="bg-image">
       <transition :name="transitionName">
         <keep-alive>
           <router-view class="child-view"></router-view>
@@ -56,7 +52,6 @@
 
 <script>
 import ObjectMap from './components/ObjectMap.vue'
-import ipcInitial from './renderIpc'
 export default {
   data: () => ({
     drawer: null,
@@ -76,9 +71,6 @@ export default {
   },
   components: {
     ObjectMap
-  },
-  mounted () {
-    ipcInitial(this.$store)
   }
 }
 </script>
@@ -125,5 +117,13 @@ export default {
   opacity: 0;  
   -webkit-transform: translate(-30px, 15px) scale(1.2);
   transform: translate(-30px, 15px) scale(1.2);
-}  
+}
+ ::-webkit-scrollbar {
+   width: 4px;
+ }
+
+ ::-webkit-scrollbar-thumb {
+   background: lightskyblue;
+   border-radius: 2px;
+ }
 </style>

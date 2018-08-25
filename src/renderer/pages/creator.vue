@@ -1,7 +1,7 @@
 <template>
     <v-container text-xs-center fluid fill-height>
         <v-layout justify-center  >
-            <v-flex lg6>
+            <v-flex>
                 <v-layout column>
                     <v-flex>
                         <v-breadcrumbs divider="->">
@@ -14,8 +14,10 @@
                         </v-breadcrumbs-item>
                         </v-breadcrumbs>
                     </v-flex>
-                    <v-flex xs12>
-                        <router-view></router-view>
+                    <v-flex>
+                        <keep-alive>
+                            <router-view></router-view>
+                        </keep-alive>
                     </v-flex>
                 </v-layout>
             </v-flex>
