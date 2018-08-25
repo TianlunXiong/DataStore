@@ -3,7 +3,6 @@
 import { app, BrowserWindow, Menu } from 'electron'
 import koa from './koa'
 import menu from './menu'
-import createTray from './tray'
 import state from './store'
 /**
  * Set `__static` path to static files in production
@@ -12,7 +11,7 @@ import state from './store'
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
-
+app.setName('DataStore')
 let mainWindow
 let server
 const winURL = process.env.NODE_ENV === 'development'
@@ -48,10 +47,8 @@ function createServer () {
 }
 
 app.on('ready', () => {
-  app.setName('DataStore')
   createWindow()
   createMenu()
-  createTray()
   createServer()
   state({
     mainWindow,
