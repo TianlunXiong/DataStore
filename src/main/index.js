@@ -1,7 +1,10 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
-
+import { app, BrowserWindow, Menu } from 'electron'
+import koa from './koa'
+import menu from './menu'
+import createTray from './tray'
+import state from './store'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -11,6 +14,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 let mainWindow
+let server
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
@@ -30,11 +34,29 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-
-  let childWindow = new BrowserWindow({parent: mainWindow})
 }
 
-app.on('ready', createWindow)
+function createMenu () {
+  /**
+   * create Menu
+   */
+  Menu.setApplicationMenu(menu)
+}
+
+function createServer () {
+  server = require('http').createServer(koa.callback())
+}
+
+app.on('ready', () => {
+  createWindow()
+  createMenu()
+  createTray()
+  createServer()
+  state({
+    mainWindow,
+    koa: server
+  })
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

@@ -49,7 +49,7 @@ export default {
     },
     buildObject (context, name) {
       if (context.state.objects[name]) {
-        console.log(builder(context.state.objects[name]))
+        return builder(context.state.objects[name])
       }
     }
   }

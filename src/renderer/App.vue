@@ -56,7 +56,7 @@
 
 <script>
 import ObjectMap from './components/ObjectMap.vue'
-
+import ipcInitial from './renderIpc'
 export default {
   data: () => ({
     drawer: null,
@@ -76,6 +76,9 @@ export default {
   },
   components: {
     ObjectMap
+  },
+  mounted () {
+    ipcInitial(this.$store)
   }
 }
 </script>
