@@ -48,6 +48,7 @@ function createServer () {
 }
 
 app.on('ready', () => {
+  app.setName('DataStore')
   createWindow()
   createMenu()
   createTray()

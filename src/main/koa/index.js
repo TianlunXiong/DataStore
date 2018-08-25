@@ -1,4 +1,4 @@
-import { app } from 'electron'
+import { app, ipcMain } from 'electron'
 const Koa = require('koa')
 const Router = require('koa-router')
 const koa = new Koa()
@@ -19,13 +19,19 @@ router.get('/', async (ctx, next) => {
   let name
   if (ctx.request.query.name) {
     name = ctx.request.query.name
+
     await new Promise((resolve, reject) => {
       app.dispatch('fetchObjectSignal', name)
-      resolve()
+      ipcMain.on('toKoa', (e, msg) => {
+        resolve(msg)
+      })
+    }).then(msg => {
+      ctx.response.body = msg
+    }).then(() => {
+      ipcMain.removeAllListeners('toKoa')
     })
   }
   ctx.type = 'application/json'
-  ctx.response.body = '好'
   await next()
 })
 
