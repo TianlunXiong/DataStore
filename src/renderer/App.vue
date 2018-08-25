@@ -30,7 +30,7 @@
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
-              <router-link to="/creator/1">creator</router-link>
+              <router-link to="/creator/factory">creator</router-link>
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>

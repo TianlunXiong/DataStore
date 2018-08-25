@@ -5,10 +5,7 @@
               {{keyName}}
             </span>
             <span>
-              {{type}}
-            </span>
-            <span>
-              {{totalType}}
+              {{$store.state.creator.factory.entriesBuffer[index]['value']['descriptor']}}
             </span>
         </div>
         <v-container fluid>
@@ -16,23 +13,79 @@
             <v-flex>
               <v-layout>
                 <v-flex xs6>
-                  <v-switch v-model="advancedType" label="Advanced"></v-switch>
+                  
+                  <v-switch class="mt-4" v-model="isAdvancedType"></v-switch>
                 </v-flex>
                 <v-flex xs6>
                   <v-select
+                    v-if="!isAdvancedType"
                     :items="totalType"
-                    v-model="type"
+                    v-model="typePrimary"
+                    label="Type"
+                  ></v-select>
+                  <v-select
+                    v-else
+                    :items="totalType"
+                    v-model="typeAdvanced"
                     label="Type"
                   ></v-select>
                 </v-flex>
               </v-layout>
             </v-flex>
             <v-flex>
-                <v-select
-                  :items="totalType"
-                  v-model="type"
-                  label="Type"
-                ></v-select>
+              <v-layout v-if="!isAdvancedType">
+                <v-flex xs6>
+                  <v-select
+                    :items="Object.keys($store.state.faker.fakerType[typePrimary])"
+                    v-model="fakerType"
+                    label="firstType"
+                  ></v-select>
+                </v-flex>
+                <v-flex xs6>
+                  <v-select
+                    :items="$store.state.faker.fakerType[typePrimary][fakerType]"
+                    v-model="fakerTypeItem"
+                    label="secondType"
+                  ></v-select>
+                </v-flex>
+              </v-layout>
+              <v-layout v-else>
+                <v-flex xs6>
+                  <v-select
+                    :items="Object.keys($store.state.creator.objects)"
+                    v-model="selectedObject"
+                    label="advancedType"
+                  ></v-select>
+                </v-flex>
+                <v-flex class="pb-2" v-if="typeAdvanced === 'Array'" xs6>
+                  <v-slider
+                    v-model="count"
+                    thumb-label="always"
+                    label="count"
+                  ></v-slider>
+                </v-flex>
+              </v-layout>
+            </v-flex>
+            <v-flex>
+              <v-toolbar color="white" flat>
+                  <v-btn @click="showReName=!showReName"  icon>
+                    <v-icon >edit</v-icon>
+                  </v-btn>
+                  <v-btn @click="save"  icon>
+                    <v-icon >save</v-icon>
+                  </v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn icon flat color="error" @click="handleClose">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+              </v-toolbar>
+            </v-flex>
+            <v-flex v-show="showReName">
+              <v-text-field
+                v-model="keyName"
+                @blur="showReName=false"
+                label="rename"
+              ></v-text-field>
             </v-flex>
           </v-layout>
         </v-container>
@@ -40,14 +93,14 @@
 </template>
 
 <script>
-
-const primaryType = [
+import {builder} from '@/util/'
+const primaryTypeList = [
   'String',
   'Number',
   'Boolean'
 ]
 
-const advancedType = [
+const advancedTypeList = [
   'Object',
   'Array'
 ]
@@ -55,36 +108,79 @@ const advancedType = [
 export default {
   data () {
     return {
-      keyName: 'Aulie',
-      type: '',
-      value: null,
-      advancedType: false
+      keyName: this.initialName,
+      typePrimary: 'String',
+      typeAdvanced: 'Array',
+      fakerType: '',
+      fakerTypeItem: '',
+      selectedObject: '',
+      isAdvancedType: false,
+      count: 0,
+      showReName: false
     }
   },
-
+  props: {
+    index: Number,
+    initialName: String,
+    belong: String
+  },
+  mounted () {
+    // console.log(this.$faker.name.findName())
+  },
   computed: {
     totalType () {
-      if (this.advancedType) {
+      if (this.isAdvancedType) {
         return [
-          ...advancedType
+          ...advancedTypeList
         ]
       } else {
         return [
-          ...primaryType
+          ...primaryTypeList
         ]
+      }
+    }
+  },
+  methods: {
+    save () {
+      try {
+        // 上传对象前体
+        if (this.isAdvancedType) {
+          switch (this.typeAdvanced) {
+            case 'Object':
+              this.$store.dispatch('creator/achieveEntriesBuffer', {
+                index: this.index,
+                descriptor: `Object|${this.selectedObject}`,
+                initiator: () => builder(this.$store.state.creator.objects[this.selectedObject])
+              })
+              break
+            case 'Array':
+              this.$store.dispatch('creator/achieveEntriesBuffer', {
+                index: this.index,
+                descriptor: `Array(${this.count})|${this.selectedObject}`,
+                initiator: () => new Array(this.count).fill(0).map(item => builder(this.$store.state.creator.objects[this.selectedObject]))
+              })
+              break
+          }
+        } else {
+          if (this.fakerType && this.fakerTypeItem) {
+            this.$store.dispatch('creator/achieveEntriesBuffer', {
+              index: this.index,
+              descriptor: `${this.typePrimary}|${this.fakerType}.${this.fakerTypeItem}`,
+              initiator: this.$faker[this.fakerType][this.fakerTypeItem]
+            }).then(() => {
+              console.log(this.$store.state.creator.factory.entriesBuffer)
+            })
+          }
+        }
+      } catch (error) {
+        console.log(error)
       }
     },
-
-    selection () {
-      if (this.advancedType) {
-        return [
-          ...advancedType
-        ]
-      } else {
-        return [
-          ...primaryType
-        ]
-      }
+    emitName () {
+      console.log(this.$faker.name.findName())
+    },
+    handleClose () {
+      this.$emit('deleteMe', this.index)
     }
   }
 }

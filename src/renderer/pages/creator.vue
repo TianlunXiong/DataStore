@@ -4,19 +4,15 @@
             <v-flex lg6>
                 <v-layout column>
                     <v-flex>
-                        <v-card>
-                            <v-card-title>
-                                <v-breadcrumbs large divider="->">
-                                <v-breadcrumbs-item
-                                    v-for="item in path"
-                                    :key="item.text"
-                                    :disabled="item.disabled"
-                                >
-                                    {{ item.text }}
-                                </v-breadcrumbs-item>
-                                </v-breadcrumbs>
-                            </v-card-title>
-                        </v-card>
+                        <v-breadcrumbs divider="->">
+                        <v-breadcrumbs-item
+                            v-for="item in getPath()"
+                            :key="item.text"
+                            :disabled="item.disabled"
+                        >
+                            {{ item.text }}
+                        </v-breadcrumbs-item>
+                        </v-breadcrumbs>
                     </v-flex>
                     <v-flex xs12>
                         <router-view></router-view>
@@ -41,6 +37,14 @@ export default {
           disabled: true
         }
       ]
+    }
+  },
+  methods: {
+    getPath () {
+      return this.$route.path.split('/').slice(1).map((item, i) => ({
+        text: item,
+        disabled: this.$route.name === item
+      }))
     }
   }
 }

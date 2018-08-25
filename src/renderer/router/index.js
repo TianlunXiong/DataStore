@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/pages/home.vue'
 import creator from '@/pages/creator.vue'
-import ObjectMap from '@/components/ObjectMap.vue'
+import factory from '@/pages/creator/factory.vue'
 
 Vue.use(Router)
 
@@ -14,19 +14,14 @@ export default new Router({
       component: home
     },
     {
-      path: '/creator/:id',
+      path: '/creator',
       name: 'creator',
       component: creator,
       children: [
         {
-          path: '',
-          name: 'root',
-          component: ObjectMap
-        },
-        {
-          path: 'children',
-          name: 'children',
-          component: ObjectMap
+          path: 'factory',
+          name: 'factory',
+          component: factory
         }
       ]
     },

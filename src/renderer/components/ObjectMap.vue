@@ -9,28 +9,42 @@
                         dense
                         color="purple lighten-1"
                       >
-                        <v-icon>people</v-icon>
+                        <v-btn @click="query" flat icon >
+                          <v-icon>people</v-icon>
+                        </v-btn>
                         <v-toolbar-title class="font-weight-light">
                           {{name}}
+                          <span></span>
                         </v-toolbar-title>
                         <v-spacer></v-spacer>
-                        <v-btn icon @click="addChild">
+                        <v-btn icon @click="appendChild">
                             <v-icon>add</v-icon>
+                        </v-btn>
+                        <v-btn icon @click="commit">
+                            <v-icon>check</v-icon>
                         </v-btn>
                       </v-toolbar>
                     </v-flex>
                     <v-flex>
+                      <v-text-field 
+                        v-model="name" 
+                        label="Name"
+                        clearable></v-text-field>
+                    </v-flex>
+                    <v-flex>
                       <v-text-field
-                        v-model="keyName"
+                        v-model="currentKey"
                         color="blue"
                         label="Key"
+                        @keypress="enter"
+                        clearable
                       ></v-text-field>
                     </v-flex>
                 </v-layout>
             </v-flex>
             <v-flex  xs8 sm9 md10 lg12>
                 <v-expansion-panel>
-                      <KeyValuePair></KeyValuePair>
+                      <KeyValuePair @deleteMe="deleteItem" v-for="(item, i) in $store.state.creator.factory.entriesBuffer" :belong="name" :index="i" :key="item.key" :initialName="item.key"></KeyValuePair>
                 </v-expansion-panel>
             </v-flex>
         </v-layout>
@@ -39,71 +53,71 @@
 
 <script>
 import KeyValuePair from './KeyValuePair.vue'
-const object = {
-  name: 'Jelly',
-  body: {
-    name: 'ju',
-    age: 18,
-    members: [
-      {
-        name: 'wang',
-        age: 19
-      },
-      {
-        name: 'ju',
-        age: 21
-      }
-    ],
-    edvices: {
-      go: {
-        nu: 'shi'
-      },
-      ju: {
-        nu: 'knk'
-      }
-    }
-  }
-}
 
 export default {
   data () {
     return {
-      name: object.name,
-      body: object.body,
-      keyName: '',
-      isEditing: false,
-      children: []
-    }
-  },
-  computed: {
-    pairs () {
-      return Object.entries(this.body)
+      name: '',
+      currentKey: '',
+      entries: []
     }
   },
   methods: {
-    addChild () {
-      if (this.keyName.length && this.keyName.search(/\s/g) === -1) {
-        const arr = new Array(5).fill(0).map(item => ({
-          name: Math.floor(1000 * Math.random())
-        }))
-        this.children.push({
-          name: Math.floor(1000 * Math.random()),
-          children: arr
+    appendChild () {
+      // 键名不可为: 空,存在空格,重名
+      if (this.currentKey &&
+          this.currentKey.search(/\s/g) === -1 &&
+          this.$store.state.creator.factory.entriesBuffer.every(item => item.key !== this.currentKey)) {
+        this.$store.dispatch('creator/pushEntriesBuffer', {
+          key: this.currentKey,
+          value: {
+            descriptor: '',
+            initiator: null
+          }
         })
       }
-      this.keyName = ''
+      this.currentKey = ''
     },
-    typeName () {
-      this.isNaming = true
+    commit () {
+      if (this.name &&
+       this.name.search(/\s/g) === -1 &&
+       this.$store.state.creator.factory.entriesBuffer.every(item => (item.value.descriptor && (typeof item.value.initiator === 'function')))) {
+        const temp = {}
+        this.$store.state.creator.factory.entriesBuffer.forEach(item => {
+          temp[item.key] = item.value
+        })
+        this.$store.dispatch('creator/save', {
+          name: this.name,
+          body: {...temp}
+        }).then(() => {
+          console.log(this.$store.state.creator.objects)
+          this.reset()
+        })
+      }
     },
-    deleteMe (i) {
-      this.children.splice(i, 1)
-      console.log(i)
+    deleteItem (val) {
+      this.$store.dispatch('creator/deleteEntriesBuffer', val)
+    },
+    reset () {
+      this.name = ''
+      this.currentKey = ''
+      this.$store.dispatch('creator/resetEntriesBuffer')
+    },
+    query () {
+      this.$store.dispatch('creator/buildObject', this.name)
+    },
+    enter (e) {
+      if (e.key === 'Enter') {
+        this.appendChild()
+      }
     }
   },
-
   components: {
     KeyValuePair
+  },
+
+  mounted () {
+    console.log(this.$store.state.creator.objects)
   }
 }
 </script>

@@ -30,6 +30,8 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  let childWindow = new BrowserWindow({parent: mainWindow})
 }
 
 app.on('ready', createWindow)
