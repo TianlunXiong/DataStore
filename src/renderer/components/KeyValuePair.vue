@@ -15,10 +15,10 @@
                 <v-flex xs6>
                   <v-layout>
                     <v-flex>
-                      <v-switch class="mt-4" v-model="isAdvancedType"></v-switch>
+                      <v-switch label="advanced" class="mt-4" v-model="isAdvancedType"></v-switch>
                     </v-flex>
                     <v-flex>
-                      <v-switch class="mt-4" :disabled="isAdvancedType" v-model="isCustomType"></v-switch>
+                      <v-switch label="custom" class="mt-4" :disabled="isAdvancedType" v-model="isCustomType"></v-switch>
                     </v-flex>
                   </v-layout>
                 </v-flex>

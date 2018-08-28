@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     quit () {
-      if (window.confirm('确认退出?')) {
+      if (window.confirm('sure to quit?')) {
         this.$electron.remote.app.quit()
       }
     }
