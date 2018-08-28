@@ -1,4 +1,4 @@
-# datastore_packager
+# DataStore
 
 > An electron-vue project
 
