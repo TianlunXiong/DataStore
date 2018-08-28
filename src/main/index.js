@@ -45,9 +45,6 @@ function createMenu () {
 
 function createServer () {
   server = require('http').createServer(koa.callback())
-  server.on('error', e => {
-    console.log('端口占用')
-  })
 }
 
 app.on('ready', () => {
