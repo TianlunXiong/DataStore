@@ -1,4 +1,5 @@
-import { builder } from '@/util/'
+import { builder } from '@/util'
+import Vue from 'vue'
 export default {
   namespaced: true,
   state: {
@@ -6,19 +7,32 @@ export default {
 
     },
     factory: {
-      entriesBuffer: [
-
-      ]
+      entriesBuffer: []
+    },
+    serverStatus: false
+  },
+  getters: {
+    dStoreList (state) {
+      const names = Object.keys(state.objects)
+      return names.map(name => {
+        const someMember = state.objects[name]
+        const values = Object.keys(someMember).map(key => ({
+          key,
+          descriptor: someMember[key].descriptor
+        }))
+        return {
+          name,
+          values
+        }
+      })
     }
   },
   mutations: {
     SAVE (state, object) {
-      state.objects[object.name] = object.body
+      Vue.set(state.objects, object.name, object.body)
     },
     DELETE_OBJECT (state, name) {
-      if (delete state.object[name]) {
-        console.log('成功删除')
-      }
+      Vue.delete(state.objects, name)
     },
     PUSH_ENTRIES_BUFFER (state, item) {
       state.factory.entriesBuffer.push(item)
@@ -32,6 +46,9 @@ export default {
     },
     RESET_ENTRIES_BUFFER (state) {
       state.factory.entriesBuffer = []
+    },
+    SET_SERVER (state, signal) {
+      state.serverStatus = signal
     }
   },
   actions: {
@@ -57,6 +74,9 @@ export default {
       if (context.state.objects[name]) {
         return builder(context.state.objects[name])
       }
+    },
+    setServer (context, signal) {
+      context.commit('SET_SERVER', signal)
     }
   }
 }

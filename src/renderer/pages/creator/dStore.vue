@@ -1,7 +1,8 @@
 <template>
 <v-container fluid grid-list-md>
     <v-data-iterator
-      :items="dataDone"
+      :items="$store.getters['creator/dStoreList']"
+      item-key="name"
       :rows-per-page-items="rowsPerPageItems"
       :pagination.sync="pagination"
       content-tag="v-layout"
@@ -22,11 +23,10 @@
               <v-flex xs12>
                 <v-btn block @click="handleEdit(props.index)">
                   {{ props.item.name }}
-                  {{ props.index}}
                 </v-btn>
               </v-flex>
               <v-flex>
-                <v-btn flat icon color="error" @click="() => {}">
+                <v-btn flat icon color="error" @click="deleteItem(props.item.name)">
                   <v-icon>close</v-icon>
                 </v-btn>
               </v-flex>
@@ -53,30 +53,13 @@ export default {
       rowsPerPage: 4
     }
   }),
-  computed: {
-    dataDone () {
-      const names = Object.keys(this.$store.state.creator.objects)
-      return names.map(name => {
-        const someMember = this.$store.state.creator.objects[name]
-        const values = Object.keys(someMember).map(key => ({
-          key,
-          descriptor: someMember[key].descriptor
-        }))
-        return {
-          name,
-          values
-        }
-      })
-    }
-  },
-
-  mounted () {
-    console.log(Object.keys(this.$store.state.creator.objects)[0])
-  },
-
   methods: {
     handleEdit (val) {
-      console.log(this.dataDone[val].name)
+      this.$router.push({name: 'factory', query: {target: this.$store.getters['creator/dStoreList'][val].name}})
+    },
+
+    deleteItem (name) {
+      this.$store.dispatch('creator/deleteObject', name)
     }
   }
 }

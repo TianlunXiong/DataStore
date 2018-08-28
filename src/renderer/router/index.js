@@ -24,8 +24,8 @@ export default new Router({
           component: factory
         },
         {
-          path: 'dStore',
-          name: 'dStore',
+          path: 'dstore',
+          name: 'dstore',
           component: dStore
         }
       ]

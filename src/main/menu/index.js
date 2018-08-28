@@ -1,50 +1,50 @@
 import { app, Menu } from 'electron'
 const template = [
-  {
-    label: 'App',
-    submenu: [
-      // {
-      //   label: 'Open Server',
-      //   type: 'checkbox',
-      //   checked: false,
-      //   click (menuItem, broswerWindow, e) {
-      //     switch (menuItem.checked) {
-      //       case true:
-      //         app.dispatch('switchServer', 'open')
-      //         break
-      //       case false:
-      //         app.dispatch('switchServer', 'close')
-      //         break
-      //     }
-      //   }
-      // },
-      {
-        role: 'quit',
-        label: 'Exit'
-      }
-    ]
-  },
-  {
-    label: 'View',
-    submenu: [
-      {role: 'reload'},
-      {role: 'forcereload'},
-      {role: 'toggledevtools'},
-      {type: 'separator'},
-      {role: 'resetzoom'},
-      {role: 'zoomin'},
-      {role: 'zoomout'},
-      {type: 'separator'},
-      {role: 'togglefullscreen'}
-    ]
-  },
-  {
-    role: 'window',
-    submenu: [
-      {role: 'minimize'},
-      {role: 'close'}
-    ]
-  }
+  // {
+  //   label: 'App',
+  //   submenu: [
+  //     {
+  //       label: 'Open Server',
+  //       type: 'checkbox',
+  //       checked: false,
+  //       click (menuItem, broswerWindow, e) {
+  //         switch (menuItem.checked) {
+  //           case true:
+  //             app.dispatch('switchServer', 'open')
+  //             break
+  //           case false:
+  //             app.dispatch('switchServer', 'close')
+  //             break
+  //         }
+  //       }
+  //     },
+  //     {
+  //       role: 'quit',
+  //       label: 'Exit'
+  //     }
+  //   ]
+  // },
+  // {
+  //   label: 'View',
+  //   submenu: [
+  //     {role: 'reload'},
+  //     {role: 'forcereload'},
+  //     {role: 'toggledevtools'},
+  //     {type: 'separator'},
+  //     {role: 'resetzoom'},
+  //     {role: 'zoomin'},
+  //     {role: 'zoomout'},
+  //     {type: 'separator'},
+  //     {role: 'togglefullscreen'}
+  //   ]
+  // },
+  // {
+  //   role: 'window',
+  //   submenu: [
+  //     {role: 'minimize'},
+  //     {role: 'close'}
+  //   ]
+  // }
 ]
 
 if (process.platform === 'darwin') {

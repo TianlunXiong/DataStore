@@ -30,11 +30,21 @@
             <v-list-tile-title>DStore</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+          <v-list-tile @click="quit">
+          <v-list-tile-action>
+            <v-icon>close</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Exit</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar color="indigo" dark fixed app>
+    <v-toolbar color="teal accent-4" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title></v-toolbar-title>
+      <v-toolbar-title class="headline font-weight-bold no-selected">DataStore</v-toolbar-title>
+      <v-spacer ></v-spacer>
+      <v-icon class="dragger no-selected">{{$store.state.creator.serverStatus? 'lens' : 'panorama_fish_eye'}}</v-icon>
     </v-toolbar>
     <v-content class="bg-image">
       <transition :name="transitionName">
@@ -43,23 +53,19 @@
         </keep-alive>
       </transition>
     </v-content>
-    <v-footer color="indigo" app>
+    <v-footer color="teal accent-4" app>
       <v-spacer></v-spacer>
-      <span class="white--text">&copy; 2017</span>
+      <span class="white--text">&copy; 2018 &nbsp;</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-import ObjectMap from './components/ObjectMap.vue'
 export default {
   data: () => ({
     drawer: null,
     transitionName: 'slide-left'
   }),
-  props: {
-    source: String
-  },
   watch: {
     '$route' (to, from) {
       if (to.path === '/') {
@@ -69,8 +75,12 @@ export default {
       }
     }
   },
-  components: {
-    ObjectMap
+  methods: {
+    quit () {
+      if (window.confirm('确认退出?')) {
+        this.$electron.remote.app.quit()
+      }
+    }
   }
 }
 </script>
@@ -123,7 +133,16 @@ export default {
  }
 
  ::-webkit-scrollbar-thumb {
-   background: lightskyblue;
-   border-radius: 2px;
+   background: #00BFA5;
+   /* border-radius: 2px; */
+ }
+ button {
+   -webkit-app-region: no-drag;
+ }
+ .dragger {
+   -webkit-app-region: drag;
+ }
+ .no-selected {
+   user-select: none;
  }
 </style>

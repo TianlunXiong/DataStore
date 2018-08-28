@@ -25,7 +25,8 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     height: 563,
     useContentSize: true,
-    width: 1000
+    width: 1000,
+    frame: false
   })
 
   mainWindow.loadURL(winURL)
@@ -44,6 +45,9 @@ function createMenu () {
 
 function createServer () {
   server = require('http').createServer(koa.callback())
+  server.on('error', e => {
+    console.log('端口占用')
+  })
 }
 
 app.on('ready', () => {

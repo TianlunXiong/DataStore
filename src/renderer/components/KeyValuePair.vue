@@ -13,8 +13,14 @@
             <v-flex>
               <v-layout>
                 <v-flex xs6>
-                  
-                  <v-switch class="mt-4" v-model="isAdvancedType"></v-switch>
+                  <v-layout>
+                    <v-flex>
+                      <v-switch class="mt-4" v-model="isAdvancedType"></v-switch>
+                    </v-flex>
+                    <v-flex>
+                      <v-switch class="mt-4" :disabled="isAdvancedType" v-model="isCustomType"></v-switch>
+                    </v-flex>
+                  </v-layout>
                 </v-flex>
                 <v-flex xs6>
                   <v-select
@@ -33,37 +39,49 @@
               </v-layout>
             </v-flex>
             <v-flex>
-              <v-layout v-if="!isAdvancedType">
-                <v-flex xs6>
-                  <v-select
-                    :items="Object.keys($store.state.faker.fakerType[typePrimary])"
-                    v-model="fakerType"
-                    label="firstType"
-                  ></v-select>
+              <v-layout v-show="!isAdvancedType">
+                <v-flex v-show="!isCustomType">
+                  <v-layout>
+                    <v-flex xs6>
+                      <v-select
+                        :items="Object.keys($store.state.faker.fakerType[typePrimary])"
+                        v-model="fakerType"
+                        label="firstType"
+                      ></v-select>
+                    </v-flex>
+                    <v-flex xs6>
+                      <v-select
+                        :items="$store.state.faker.fakerType[typePrimary][fakerType]"
+                        v-model="fakerTypeItem"
+                        label="secondType"
+                      ></v-select>
+                    </v-flex>
+                  </v-layout>
                 </v-flex>
-                <v-flex xs6>
-                  <v-select
-                    :items="$store.state.faker.fakerType[typePrimary][fakerType]"
-                    v-model="fakerTypeItem"
-                    label="secondType"
-                  ></v-select>
+                <v-flex v-show="isCustomType">
+                  <v-text-field :type="typePrimary === 'Number'?'number':'text'" v-if="typePrimary === 'String' || typePrimary === 'Number'" label="value" v-model="customField">
+                  </v-text-field>
+                  <v-select v-else :items="[true, false]" v-model="selectedBoolean">
+                  </v-select>
                 </v-flex>
               </v-layout>
-              <v-layout v-else>
-                <v-flex xs6>
-                  <v-select
-                    :items="Object.keys($store.state.creator.objects)"
-                    v-model="selectedObject"
-                    label="advancedType"
-                  ></v-select>
-                </v-flex>
-                <v-flex class="pb-2" v-if="typeAdvanced === 'Array'" xs6>
-                  <v-slider
-                    v-model="count"
-                    thumb-label="always"
-                    label="count"
-                  ></v-slider>
-                </v-flex>
+              <v-layout v-show="isAdvancedType">
+                <v-layout>
+                  <v-flex xs6>
+                    <v-select
+                      :items="Object.keys($store.state.creator.objects)"
+                      v-model="selectedObject"
+                      label="advancedType"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex class="pb-2" v-if="typeAdvanced === 'Array'" xs6>
+                    <v-slider
+                      v-model="count"
+                      thumb-label="always"
+                      label="count"
+                    ></v-slider>
+                  </v-flex>
+                </v-layout>
               </v-layout>
             </v-flex>
             <v-flex>
@@ -110,10 +128,13 @@ export default {
     return {
       keyName: this.initialName,
       typePrimary: 'String',
+      isCustomType: false,
+      customField: '',
       typeAdvanced: 'Array',
       fakerType: '',
       fakerTypeItem: '',
       selectedObject: '',
+      selectedBoolean: true,
       isAdvancedType: false,
       count: 0,
       showReName: false
@@ -125,7 +146,6 @@ export default {
     belong: String
   },
   mounted () {
-    // console.log(this.$faker.name.findName())
   },
   computed: {
     totalType () {
@@ -139,6 +159,8 @@ export default {
         ]
       }
     }
+  },
+  watch: {
   },
   methods: {
     save () {
@@ -162,22 +184,43 @@ export default {
               break
           }
         } else {
-          if (this.fakerType && this.fakerTypeItem) {
-            this.$store.dispatch('creator/achieveEntriesBuffer', {
-              index: this.index,
-              descriptor: `${this.typePrimary}|${this.fakerType}.${this.fakerTypeItem}`,
-              initiator: this.$faker[this.fakerType][this.fakerTypeItem]
-            }).then(() => {
-              console.log(this.$store.state.creator.factory.entriesBuffer)
-            })
+          if (!this.isCustomType) {
+            if (this.fakerType && this.fakerTypeItem) {
+              this.$store.dispatch('creator/achieveEntriesBuffer', {
+                index: this.index,
+                descriptor: `${this.typePrimary}|${this.fakerType}.${this.fakerTypeItem}`,
+                initiator: this.$faker[this.fakerType][this.fakerTypeItem]
+              })
+            }
+          } else {
+            switch (this.typePrimary) {
+              case 'String':
+                this.$store.dispatch('creator/achieveEntriesBuffer', {
+                  index: this.index,
+                  descriptor: `String|Custom`,
+                  initiator: () => this.customField
+                })
+                break
+              case 'Number':
+                this.$store.dispatch('creator/achieveEntriesBuffer', {
+                  index: this.index,
+                  descriptor: `Number|Custom`,
+                  initiator: () => Number(this.customField)
+                })
+                break
+              case 'Boolean':
+                this.$store.dispatch('creator/achieveEntriesBuffer', {
+                  index: this.index,
+                  descriptor: `Boolean|Custom`,
+                  initiator: () => this.selectedBoolean
+                })
+                break
+            }
           }
         }
       } catch (error) {
         console.log(error)
       }
-    },
-    emitName () {
-      console.log(this.$faker.name.findName())
     },
     handleClose () {
       this.$emit('deleteMe', this.index)
