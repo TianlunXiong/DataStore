@@ -1,6 +1,6 @@
 # DataStore
 
-> Visual develop tool of creating mocked Jsongit
+> A Visual development-tool of creating mocked Json
 
 
 
