@@ -1,8 +1,10 @@
 # DataStore
 
-> An electron-vue project
+> Visual develop tool of creating mocked Jsongit
 
-#### Build Setup
+
+
+#### Build and Dev Setup
 
 ``` bash
 # install dependencies
@@ -13,7 +15,6 @@ npm run dev
 
 # build electron application for production
 npm run build
-
 
 # lint all JS/Vue component files in `src/`
 npm run lint
