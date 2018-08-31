@@ -21,9 +21,7 @@
           <v-card-title >
             <v-layout>
               <v-flex xs12>
-                <v-btn block @click="handleEdit(props.index)">
-                  {{ props.item.name }}
-                </v-btn>
+                <v-btn style="text-transform: none" block @click="handleEdit(props.index)">{{ props.item.name }}</v-btn>
               </v-flex>
               <v-flex>
                 <v-btn flat icon color="error" @click="deleteItem(props.item.name)">
@@ -35,7 +33,7 @@
           <v-divider></v-divider>
           <v-list  dense>
             <v-list-tile v-for="data in props.item.values" :key="data.key">
-              <v-list-tile-content>key:{{data.key}} </v-list-tile-content> <br>
+              <v-list-tile-content>{{data.key}} </v-list-tile-content> <br>
               <v-list-tile-content class="align-end">{{ data.descriptor }}</v-list-tile-content>
             </v-list-tile>
           </v-list>

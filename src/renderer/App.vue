@@ -22,7 +22,7 @@
             <v-list-tile-title>Factory</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click="$router.replace('/creator/dStore')">
+        <v-list-tile @click="$router.replace('/creator/store')">
           <v-list-tile-action>
             <v-icon>subject</v-icon>
           </v-list-tile-action>

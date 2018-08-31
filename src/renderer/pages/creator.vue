@@ -6,7 +6,7 @@
                     <v-flex>
                         <v-breadcrumbs large divider="-">
                         <v-breadcrumbs-item
-                            v-for="item in getPath()"
+                            v-for="item in path"
                             :key="item.text"
                             :disabled="item.disabled"
                         >
@@ -27,8 +27,8 @@
 
 <script>
 export default {
-  methods: {
-    getPath () {
+  computed: {
+    path () {
       return this.$route.path.split('/').slice(1).map((item, i) => ({
         text: item,
         disabled: true // this.$route.name === item
