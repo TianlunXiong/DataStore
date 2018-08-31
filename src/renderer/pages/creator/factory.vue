@@ -112,8 +112,8 @@ export default {
         })
       }
     },
-    deleteItem (val) {
-      this.$store.dispatch('creator/deleteEntriesBuffer', val)
+    deleteItem (index) {
+      this.$store.dispatch('creator/deleteEntriesBuffer', index)
     },
     reset () {
       this.name = ''

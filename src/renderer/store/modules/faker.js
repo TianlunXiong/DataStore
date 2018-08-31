@@ -49,7 +49,7 @@ const FAKER_TYPE = {
       'bsBuzz',
       'bsNoun'
     ],
-    'datebase': [
+    'database': [
       'column',
       'type',
       'collation',

@@ -38,6 +38,7 @@ export default {
       state.factory.entriesBuffer.push(item)
     },
     ACHIEVE_ENTRIES_BUFFER (state, achieve) {
+      state.factory.entriesBuffer[achieve.index]['key'] = achieve.key
       state.factory.entriesBuffer[achieve.index]['value']['descriptor'] = achieve.descriptor
       state.factory.entriesBuffer[achieve.index]['value']['initiator'] = achieve.initiator
     },

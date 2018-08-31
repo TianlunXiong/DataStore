@@ -171,6 +171,7 @@ export default {
             case 'Object':
               this.$store.dispatch('creator/achieveEntriesBuffer', {
                 index: this.index,
+                key: this.keyName,
                 descriptor: `Object|${this.selectedObject}`,
                 initiator: () => builder(this.$store.state.creator.objects[this.selectedObject])
               })
@@ -178,6 +179,7 @@ export default {
             case 'Array':
               this.$store.dispatch('creator/achieveEntriesBuffer', {
                 index: this.index,
+                key: this.keyName,
                 descriptor: `Array(${this.count})|${this.selectedObject}`,
                 initiator: () => new Array(this.count).fill(0).map(item => builder(this.$store.state.creator.objects[this.selectedObject]))
               })
@@ -188,6 +190,7 @@ export default {
             if (this.fakerType && this.fakerTypeItem) {
               this.$store.dispatch('creator/achieveEntriesBuffer', {
                 index: this.index,
+                key: this.keyName,
                 descriptor: `${this.typePrimary}|${this.fakerType}.${this.fakerTypeItem}`,
                 initiator: this.$faker[this.fakerType][this.fakerTypeItem]
               })
@@ -197,6 +200,7 @@ export default {
               case 'String':
                 this.$store.dispatch('creator/achieveEntriesBuffer', {
                   index: this.index,
+                  key: this.keyName,
                   descriptor: `String|Custom`,
                   initiator: () => this.customField
                 })
@@ -204,6 +208,7 @@ export default {
               case 'Number':
                 this.$store.dispatch('creator/achieveEntriesBuffer', {
                   index: this.index,
+                  key: this.keyName,
                   descriptor: `Number|Custom`,
                   initiator: () => Number(this.customField)
                 })
@@ -211,6 +216,7 @@ export default {
               case 'Boolean':
                 this.$store.dispatch('creator/achieveEntriesBuffer', {
                   index: this.index,
+                  key: this.keyName,
                   descriptor: `Boolean|Custom`,
                   initiator: () => this.selectedBoolean
                 })
